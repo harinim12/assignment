@@ -290,13 +290,12 @@ select distinct e1.student_id
 from Enrollments e1
 JOIN Enrollments e2 ON e1.student_id = e2.student_id and e1.course_id <> e2.course_id;
 
-
 --10. Find teachers who are not assigned to any courses. Use a LEFT JOIN between the "Teacher" table and the "Courses" table and filter for teachers with NULL course assignments. 
 
 select t.first_name, t.last_name,c.course_id
 from Teacher t
 LEFT JOIN Courses c on t.teacher_id = c.teacher_id
-where c.course_id IS NULL;
+where c.course_id is null;
 
 select * from courses
 select * from teacher
@@ -306,16 +305,16 @@ select * from teacher
 --1) Write an SQL query to calculate the average number of students enrolled in each course. Use aggregate functions and subqueries to achieve this.
 
 select avg(enrollment_count) as average_enrollment
-from(SELECT COUNT(e.student_id) AS enrollment_count
+from(select count(e.student_id) AS enrollment_count
   from Enrollments e
   group by e.course_id ) AS course_enrollments;
 
 --2) Identify the student(s) who made the highest payment. Use a subquery to find the maximum payment amount and then retrieve the student(s) associated with that amount. 
 
-SELECT s.first_name, s.last_name, p.amount
-FROM students s
-JOIN payments p ON s.student_id = p.student_id
-WHERE p.amount = (SELECT MAX(amount) FROM payments);
+select s.first_name, s.last_name, p.amount
+from students s
+join payments p ON s.student_id = p.student_id
+where p.amount = (select max(amount) from payments);
 
 --3. Retrieve a list of courses with the highest number of enrollments. Use subqueries to find the course(s) with the maximum enrollment count. 
 
@@ -343,15 +342,13 @@ where (select count(distinct e.course_id)
       (select count(course_id) 
        from Courses);
 
-
 --6. Retrieve the names of teachers who have not been assigned to any courses. Use subqueries to find teachers with no course assignments. 
 select t.first_name, t.last_name
 from teacher t
 where t.teacher_id not in (
     select c.teacher_id
     from courses c
-    where c.teacher_id is not null 	
-);
+    where c.teacher_id is not null);
 
 --7. Calculate the average age of all students. Use subqueries to calculate the age of each student based on their date of birth. 
 
